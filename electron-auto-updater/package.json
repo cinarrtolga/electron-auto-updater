@@ -1,8 +1,8 @@
 {
-  "name": "electron-auto-updater",
-  "version": "0.1.0",
+  "name": "electron-auto-updater-app",
+  "version": "0.9.0",
   "private": true,
-  "productName": "Electron Auto Updater Sample",
+  "productName": "Electron Auto Updater App",
   "main": "public/electron.js",
   "homepage": "./",
   "dependencies": {
@@ -13,6 +13,7 @@
     "@types/node": "^16.11.43",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "electron-updater": "^4.6.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
@@ -25,8 +26,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start-electron": "export ELECTRON_START_URL=http://localhost:3000 && electron .",
-    "package": "electron-builder build --mac --win -c.extraMetadata.main=build/electron.js --publish never",
-    "publish": "electron-builder build --mac --win --publish always"
+    "package": "electron-builder build --win -c.extraMetadata.main=build/electron.js --publish never",
+    "publish": "electron-builder build --win --publish always"
   },
   "eslintConfig": {
     "extends": [
@@ -48,16 +49,12 @@
   },
   "devDependencies": {
     "electron": "^19.0.7",
-    "electron-builder": "^23.1.0"
+    "electron-builder": "^22.14.13"
   },
   "build": {
-    "mac": {
-      "publish": {
-        "provider": "github",
-        "owner": "cinarrtolga",
-        "repo": "electron-auto-updater"
-      }
-    },
+    "appId": "tutorial.reactElectronApp",
+    "productName": "Electron Auto Updater App",
+    "copyright": "cinarrtolga",
     "win": {
       "publish": {
         "provider": "github",
@@ -73,6 +70,12 @@
       "provider": "github",
       "private": true,
       "owner": "cinarrtolga"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true
     }
   }
 }

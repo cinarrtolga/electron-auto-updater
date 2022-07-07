@@ -1,6 +1,6 @@
 {
   "name": "electron-auto-updater-app",
-  "version": "0.9.0",
+  "version": "1.1.1-alpha",
   "private": true,
   "productName": "Electron Auto Updater App",
   "main": "public/electron.js",
@@ -14,6 +14,7 @@
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "electron-updater": "^4.6.5",
+    "env-cmd": "^10.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
@@ -21,13 +22,17 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "version": "echo 'starting postversion script'",
+    "postversion": "LAST_VERSION=$(npm pkg get version | sed 's/\"//g')$REACT_APP_ENV_UPDATE_CHANNEL_SUFFIX && echo $LAST_VERSION && sed -i.bak \"s/\\\"version\\\": \\\"[0-9]\\.[0-9]\\.[0-9]\\\"/\\\"version\\\": \\\"$LAST_VERSION\\\"/g\" package.json",
     "start": "export BROWSER=none && react-scripts start",
-    "build": "react-scripts build",
+    "build:dev": "env-cmd -f .env.dev npm run version && react-scripts build",
+    "build:qa": "env-cmd -f .env.qa npm run version && react-scripts build",
+    "build:prod": "env-cmd -f .env.prod npm run version && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start-electron": "export ELECTRON_START_URL=http://localhost:3000 && electron .",
     "package": "electron-builder build --win -c.extraMetadata.main=build/electron.js --publish never",
-    "publish": "electron-builder build --win --publish always"
+    "publish": "electron-builder build --mac --publish always"
   },
   "eslintConfig": {
     "extends": [
@@ -52,10 +57,18 @@
     "electron-builder": "^22.14.13"
   },
   "build": {
+    "generateUpdatesFilesForAllChannels": true,
     "appId": "tutorial.reactElectronApp",
     "productName": "Electron Auto Updater App",
     "copyright": "cinarrtolga",
     "win": {
+      "publish": {
+        "provider": "github",
+        "owner": "cinarrtolga",
+        "repo": "electron-auto-updater"
+      }
+    },
+    "mac": {
       "publish": {
         "provider": "github",
         "owner": "cinarrtolga",
@@ -70,12 +83,6 @@
       "provider": "github",
       "private": true,
       "owner": "cinarrtolga"
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": false,
-      "allowElevation": true,
-      "allowToChangeInstallationDirectory": true
     }
   }
 }

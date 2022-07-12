@@ -18,12 +18,7 @@ jobs:
         run: |
           echo "Exporting NPM_TOKEN"
           echo ${{ secrets.NPM_TOKEN }}
-          cd ./electron-auto-updater/public
-          touch .env
-          echo REACT_APP_ENV_UPDATE_CHANNEL_SUFFIX="-beta" >> .env
-          echo REACT_APP_ENV_UPDATE_CHANNEL_STRING="beta" >> .env
-          cat .env
-          cd ..
+          cd ./electron-auto-updater
           npm install
           npm install wine --save
           npm install -g npm
@@ -47,11 +42,7 @@ jobs:
         run: |
           echo "Exporting NPM_TOKEN"
           echo ${{ secrets.NPM_TOKEN }}
-          cd ./electron-auto-updater/public
-          touch .env
-          echo REACT_APP_ENV_UPDATE_CHANNEL_SUFFIX="" >> .env
-          echo REACT_APP_ENV_UPDATE_CHANNEL_STRING="latest" >> .env
-          cat .env
+          cd ./electron-auto-updater
           npm install
           npm install wine --save
           npm install -g npm

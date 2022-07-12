@@ -1,0 +1,62 @@
+name: Electron release
+'on':
+  push:
+    branches:
+      - develop
+      - test
+jobs:
+  electron_app:
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 15.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15.x
+      - name: 'dev npm install, build'
+        if: github.ref == 'refs/heads/test'
+        run: |
+          echo "Exporting NPM_TOKEN"
+          echo ${{ secrets.NPM_TOKEN }}
+          cd public
+          touch .env
+          echo REACT_APP_ENV_UPDATE_CHANNEL_SUFFIX="-beta" >> .env
+          echo REACT_APP_ENV_UPDATE_CHANNEL_STRING="beta" >> .env
+          cat .env
+          cd ..
+          npm install
+          npm install wine --save
+          npm install -g npm
+          echo ${{github.ref}}
+          npm run build:dev
+          npm run publish
+        env:
+          REACT_APP_ENV_UPDATE_CHANNEL_SUFFIX: -beta
+          REACT_APP_ENV_UPDATE_CHANNEL_STRING: 'beta'
+      # - name: 'prod npm install, build'
+      #   run: |
+      #     echo "Exporting NPM_TOKEN"
+      #     echo ${{ secrets.NPM_TOKEN }}
+      #     export NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+      #     npm install
+      #     npm install wine --save
+      #     npm run build:prod
+      #     npm run publish
+      - name: 'prod npm install, build'
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          echo "Exporting NPM_TOKEN"
+          echo ${{ secrets.NPM_TOKEN }}
+          touch .env
+          echo REACT_APP_ENV_UPDATE_CHANNEL_SUFFIX="" >> .env
+          echo REACT_APP_ENV_UPDATE_CHANNEL_STRING="latest" >> .env
+          cat .env
+          npm install
+          npm install wine --save
+          npm install -g npm
+          echo ${{github.ref}}
+          npm run build:prod
+          npm run publish
+        env:
+          REACT_APP_ENV_UPDATE_CHANNEL_SUFFIX: ''
+          REACT_APP_ENV_UPDATE_CHANNEL_STRING: 'latest'

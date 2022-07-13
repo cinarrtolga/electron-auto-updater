@@ -18,6 +18,7 @@ jobs:
         run: |
           echo "Exporting NPM_TOKEN"
           echo ${{ secrets.NPM_TOKEN }}
+          export GH_TOKEN=${{ secrets.GH_TOKEN }}
           cd ./electron-auto-updater
           npm install
           npm install wine --save
@@ -42,6 +43,7 @@ jobs:
         run: |
           echo "Exporting NPM_TOKEN"
           echo ${{ secrets.NPM_TOKEN }}
+          export GH_TOKEN=${{ secrets.GH_TOKEN }}
           cd ./electron-auto-updater
           npm install
           npm install wine --save
